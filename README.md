@@ -56,3 +56,5 @@ which has the following fields
 * `stop`: The stopping criterion which terminated the optimization loop
 * `lsqr`: max number of lsqr iterations used at any iterate
 
+
+Codes by: Carlos Borges, Adrianna Gillman
