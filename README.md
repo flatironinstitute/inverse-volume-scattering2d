@@ -44,7 +44,7 @@ by the `generating_data.m` script, and relies on the fields
 
 The script runs recursive linearization to construct the inverse
 medium properties, and stores the results in `test_result.mat`
-containing an array of structs called `solution' of size `nkh`
+containing an array of structs called `solution` of size `nkh`
 which has the following fields
 
 * `q_newton`: point values of the medium at a grid of points `XP, YP`
