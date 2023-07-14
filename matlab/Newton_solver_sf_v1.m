@@ -196,9 +196,9 @@ while flag_newton %((it_newton<=N_Newton_it) && (norm(res)/norm(u_meas.field)>1e
     rhs_orig = u_meas.field-u_scat_bd_newton;
 
     fprintf('|dq|=%d\n',norm(dq(:)))
-    fprintf('|dq|/q=%d\n',norm(dq(:))/norm(domain(:)))
+    fprintf('|dq|/q=%d\n',norm(dq(:))/norm(domain(2:end)))
     
-    if norm(dq(:))/norm(domain(:)) < eps_dq
+    if norm(dq(:))/norm(domain(2:end)) < eps_dq
         flag_newton = 0;
         iesc = 1;
         fprintf('Step shape too small!\n');
