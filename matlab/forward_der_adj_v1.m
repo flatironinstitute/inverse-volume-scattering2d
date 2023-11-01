@@ -1,4 +1,9 @@
-function [result,phi1,solution,phi2]=forward_der_adj_v1(NODES,OPERATORS,PARAMETERS,vector,xx,yy,fsource1)
+function [result,phi1,solution,phi2]=forward_der_adj_v1(NODES,OPERATORS,PARAMETERS,vector,xx,yy,fsource1, rcompmat)
+
+
+if nargin == 7
+    rcompmat = [];
+end
 % fprintf('Inside adj!\n')
 % PARAMETERS
 %for parameters
@@ -56,7 +61,12 @@ charge_phi1=reshape(vector,npoints,ntheta);
 % for each direction 
 phi1=zeros(size(xx,2),ntheta);
 for ii=1:ntheta
-    phi1_aux(ii).field=transpose(fmm_applier(kh,source_in,conj(charge_phi1(:,ii)),target_in));
+
+    if(nargin == 7)
+        phi1_aux(ii).field=transpose(fmm_applier(kh,source_in,conj(charge_phi1(:,ii)),target_in));
+    else
+        phi1_aux(ii).field = rcompmat*conj(charge_phi1(:,ii));
+    end
 %     phi1_aux1(ii).field=transpose(fmm_applier(kh,source_in,charge_phi1(:,ii),target_in));
 end
 for ii=1:ntheta

@@ -130,7 +130,9 @@ while flag_newton %((it_newton<=N_Newton_it) && (norm(res)/norm(u_meas.field)>1e
 	N_it_lsqr = length(IndFilter);
 	if N_it_lsqr<50
 		N_it_lsqr=50;
-	end
+    end
+
+    N_it_lsqr = 3;
 	tic
         [dq_newton,flag,relres,iter]=run_lsqr_derivative(PARAMETERS,OPERATORS,NODES,xx,yy,u_scat_domain_newton+transpose(u_inc),1e-4,N_it_lsqr,rhs_orig);
 	toc
