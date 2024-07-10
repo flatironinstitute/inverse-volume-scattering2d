@@ -9,8 +9,9 @@ addpath('../matlab');
 %              2; multiplicative
 noise_type =0;
 noise_lvl = 0.02;
-data_file = 'test_data.mat';
+data_file = 'data_k30_dk0.25_dom1_inctype8_q_func1.7';
 result_file = 'test_result.mat';
+flag_loaded_data = 1;
 
 %loading data
 load(data_file);
@@ -27,7 +28,7 @@ reg_param_vec=floor(2*khv);
 reg_param_vec(reg_param_vec<3)=3;
 
 fprintf('Newton method!\n')
-for ikh = 1 : length(khv) %frequency loop
+for ikh = 1 : 37 %frequency loop
     
         %setting parameters
         kh=khv(ikh);
@@ -68,7 +69,7 @@ for ikh = 1 : length(khv) %frequency loop
 
         %Generating data for the forward problem
         fprintf('Loading scattered data!\n')                                 
-        u_sol.field = u_meas(ikh).field(:);            
+        u_sol.field = umeas(ikh).data(:);            
 
         [ domain_newton, it_newton, rhs_out, iesc, iter_lsqr ] = Newton_solver_sf_v1(N_Newton_it,eps_dq,eps_res,kh,imodes,ipoints,itheta,radius,len2,Np,Ncheb,u_sol,ireg_param,domain);
 
@@ -80,7 +81,7 @@ for ikh = 1 : length(khv) %frequency loop
         solution(ikh).q_newton = q_newton;
 	    solution(ikh).coefs    = pdomain;
 	    solution(ikh).rhs      = rhs_out;
-	    solution(ikh).rel_rhs  = norm(rhs_out)/norm(u_meas(ikh).field(:));
+	    solution(ikh).rel_rhs  = norm(rhs_out)/norm(umeas(ikh).data(:));
 	    solution(ikh).it       = it_newton;
         solution(ikh).stop     = iesc;
 	    solution(ikh).lsqr     = iter_lsqr;

@@ -17,11 +17,11 @@ ncoefs=nmodes.*nmodes; %number of coefficients in solution
     
 %radius
 %radius  = r_tgt;
-% for ik = 1: length(khv)
-%     ntheta(ik)  = size(u_meas(ik).field,2);%size(dir,2)*ones(1,length(khv));
-%     npoints(ik) = size(u_meas(ik).field,1);%size(tgt,2)*ones(1,length(khv));
-%     fprintf('Wavenumber=%d, Targets=%d, Directions=%d\n',khv(ik),npoints(ik),ntheta(ik))
-% end
+for ik = 1: length(khv)
+    ntheta(ik)  = size(umeas(ik).data,2);%size(dir,2)*ones(1,length(khv));
+    npoints(ik) = size(umeas(ik).data,1);%size(tgt,2)*ones(1,length(khv));
+    fprintf('Wavenumber=%d, Targets=%d, Directions=%d\n',khv(ik),npoints(ik),ntheta(ik))
+end
 
 %solver parameters
 %Ncheb=8;               %number of Chebyshev points in each box
