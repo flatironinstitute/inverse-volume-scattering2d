@@ -1,7 +1,9 @@
 clear
 format long
 
-addpath('../matlab');
+addpath('../../matlab');
+addpath('../../../fmm2d/matlab');
+addpath('../../../finufft/matlab');
 
 %choose to add noise
 % noise_type = 0; no noise
@@ -9,7 +11,7 @@ addpath('../matlab');
 %              2; multiplicative
 noise_type =0;
 noise_lvl = 0.02;
-data_file = 'data_k30_dk0.25_dom1_inctype8_q_func1.7';
+data_file = '../data_k30_dk0.25_dom1_inctype8_q_func1.7';
 result_file = 'test_result_kh20_extrapolated.mat';
 flag_loaded_data = 1;
 
@@ -53,22 +55,21 @@ for ikh = 1 : 77 %frequency loop
 
         else
 
-                coefs_old=domain(2:end);
-                coefs = leveling(nmodes(ikh), nmodes(ikh-1), coefs_old);
-                
-                domain=[nmodes(ikh),coefs];
-        end
-
-        if nmodes(ikh) > nmodes(ikh-1) && nmodes(ikh) > 5 && ifextrapolate
+            coefs_old=domain(2:end);
             
-          coefs_old = coefs;
-          coefs = extrapolate_coefficients(coefs_old, nmodes(ikh-1), nmodes(ikh));
-          domain=[nmodes(ikh),coefs];
-          if abs(nmodes(ikh) - nmodes(ikh-1)) > 1  
-              warning(['nmodes skipped by more than 1, extrapolation only done' ...
-                  'for one set of coefs over'])
-          end
+            if (nmodes(ikh) > nmodes(ikh-1)) && (nmodes(ikh) > 5) && (ifextrapolate)        
+                coefs = extrapolate_coefficients(coefs_old, nmodes(ikh-1), nmodes(ikh));
+                if abs(nmodes(ikh) - nmodes(ikh-1)) > 1  
+                    warning(['nmodes skipped by more than 1, extrapolation only done' ...
+                'for one set of coefs over'])
+                end
+                coefs = coefs(:).';
+            else
+                coefs = leveling(nmodes(ikh), nmodes(ikh-1), coefs_old);
+            end
+            domain=[nmodes(ikh),coefs];
         end
+        
 
         %flags for Newton method
         res_old=1;
