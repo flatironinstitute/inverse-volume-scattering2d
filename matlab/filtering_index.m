@@ -1,4 +1,4 @@
-function [C,ind]=filtering_index(N,kh)
+function [C,ind] = filtering_index(N, kh)
 global reg_parameter
 A=repmat(1:N,N,1);
 B=A';
