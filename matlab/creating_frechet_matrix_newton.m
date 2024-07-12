@@ -27,11 +27,4 @@ DF=zeros(size(A,1)*2,size(A,2));
 DF(1:2:end,:)=real(A);
 DF(2:2:end,:)=imag(A);
 
-%RA=real(A);
-%IA=imag(A);
-%A1=zeros(size(A,1)*2,size(A,2));
-%A1(1:2:end,:)=RA;
-%A1(2:2:end,:)=IA;
-%DF=A1;
-
 return

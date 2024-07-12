@@ -1,7 +1,7 @@
 clear
 format long
 
-addpath('../matlab');
+addpath('../../matlab');
 
 %choose to add noise
 % noise_type = 0; no noise
@@ -9,8 +9,8 @@ addpath('../matlab');
 %              2; multiplicative
 noise_type =0;
 noise_lvl = 0.02;
-data_file = 'data_k30_dk0.25_dom1_inctype8_q_func1.7';
-result_file = 'test_result.mat';
+data_file = '../data_k30_dk0.25_dom1_inctype8_q_func1.7';
+result_file = 'tmp.mat';
 flag_loaded_data = 1;
 
 %loading data
@@ -23,15 +23,14 @@ run('parameters_volume_regularization.m')
 % with parameteres_rla.m before running this code
 
 fprintf('Newton method!\n')
-nkh = 37;
+nkh = 17;
 solution = struct.empty(nkh, 0);
-for ikh = 1 : 37 %frequency loop
+for ikh = 1 : nkh %frequency loop
     
         %setting parameters
         kh=khv(ikh);
         ipoints=npoints(ikh);
         itheta=ntheta(ikh);
-        ireg_param = reg_param_vec(ikh);
         imodes = nmodes(ikh);
         theta_it=0:2*pi/ntheta(ikh):2*pi-2*pi/ntheta(ikh);
         fprintf('\n************************\n');
@@ -41,7 +40,7 @@ for ikh = 1 : 37 %frequency loop
         fprintf('************************\n');
 
         %setting initial guess
-        if (ikh==1)
+        if (ikh == 1)
 
                 c1=zeros(1,nmodes(ikh)*nmodes(ikh));
                 domain=[nmodes(ikh),c1];
@@ -65,8 +64,8 @@ for ikh = 1 : 37 %frequency loop
         [I, J] = meshgrid(1:nmodes(ikh));
         rr = sqrt(I.^2 + J.^2);
         rr = rr(:);
-        diags = freg(rr, r0s(ikh));
-        diags = diags(IndFilter);
+        diags0 = freg(rr, r0s(ikh));
+        diags = diags0(IndFilter);
 
         %Generating data for the forward problem
         fprintf('Loading scattered data!\n')                                 
@@ -87,6 +86,7 @@ for ikh = 1 : 37 %frequency loop
 	    solution(ikh).it       = it_newton;
         solution(ikh).stop     = iesc;
 	    solution(ikh).lsqr     = iter_lsqr;
+        solution(ikh).diags    = reshape(diags0, [nmodes(ikh), nmodes(ikh)]);
         domain(2:end)=domain_newton(2:end);
 
         if mod(ikh,5)

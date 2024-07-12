@@ -12,8 +12,8 @@ end_k=khv(end);              %final frequency
 dk=khv(2)-khv(1);                %frequency step
     
 %search parameters
-r0s = floor(2*khv); % shift for regularization parameter
-nmodes = 40;
+r0s = 2*khv; % shift for regularization parameter
+nmodes = 40*ones(size(khv));
 ncoefs = nmodes.*nmodes; %number of coefficients in solution
 
 dmax = 1e3;

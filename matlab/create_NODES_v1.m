@@ -6,6 +6,7 @@ kh=PARAMETERS.kh;
 khq=PARAMETERS.kh;
 len2=PARAMETERS.len2;
 Ncheb=PARAMETERS.Ncheb;
+nmodes = PARAMETERS.nmodes;
 
 % fprintf('\nCalculating The field for the guess domain\n',kh)
 % fprintf('First part of the derivative\n')
@@ -13,8 +14,11 @@ Ncheb=PARAMETERS.Ncheb;
 % M=ceil(log2(kh*len2/pi)+1);%number of points to avoid inverse crimes
 % M=ceil(log2(5/8*kh*len2/pi));%number of points to avoid inverse crimes
 % M=ceil(log2(8/8*kh*len2/pi));%number of points to avoid inverse crimes
-Np=PARAMETERS.Np;%number of points per wavelength
+Np = PARAMETERS.Np;%number of points per wavelength
 M=ceil(log2(Np*len2*khq/(32*pi)));%have to confirm it later
+M2=ceil(log2(4*len2*(nmodes)/(32*pi)));
+
+M = max(M, M2);
 
 if (M<2)
     M=2;

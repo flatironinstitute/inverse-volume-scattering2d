@@ -94,7 +94,7 @@ while flag_newton
 	fprintf('mldivide-time\n')
     %calculating the jacobian matrix
     tic
-	DF_newton = creating_frechet_matrix_newton(PARAMETERS, ...
+	DF_newton = creating_frechet_matrix_newton_lowmem(PARAMETERS, ...
               NODES, OPERATORS, xx, yy, u_total_domain_newton);    
 
     %newton step here
@@ -187,16 +187,16 @@ while flag_newton
        fprintf('RHS too small!\n')
     end
 
-    if rnorm_old < rnorm                 
-        domain = domain_old;        
-        iesc = 4;
-        fprintf('RHS increasing! %d -> %d\n',rnorm_old/norm(u_meas.field(:)),rnorm/norm(u_meas.field(:)))
-		break;
-    end
+    % if rnorm_old < rnorm                 
+    %     domain = domain_old;        
+    %     iesc = 4;
+    %     fprintf('RHS increasing! %d -> %d\n',rnorm_old/norm(u_meas.field(:)),rnorm/norm(u_meas.field(:)))
+	% 	break;
+    % end
     rhs_old = rhs_newton;
         
     fprintf('RHS =%d\n\n',norm(rhs_newton(:))/norm(u_meas.field(:)))    
-    fprintf('opt goal: =%d\n\n',rnorm/norm(u_meas.field(:)))    
+    % fprintf('opt goal: =%d\n\n',rnorm/norm(u_meas.field(:)))    
     it_newton=it_newton+1;
 
 end
