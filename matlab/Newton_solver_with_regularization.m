@@ -72,6 +72,10 @@ res_aux_imag = imag(u_meas.field - u_scat_bd_newton);
 rhs_newton = zeros(2*size(u_meas.field,1),1);
 rhs_newton(1:2:end) = res_aux_real;
 rhs_newton(2:2:end) = res_aux_imag;
+rhs_orig = u_meas.field - u_scat_bd_newton;
+
+rsc = length(rhs_orig(:))/kh;
+nq = nmodes*nmodes;
 
 rhs_old = rhs_newton;
 q_old = domain(2:end);
@@ -90,27 +94,33 @@ while flag_newton
     dq = zeros(1,PARAMETERS.nmodes*PARAMETERS.nmodes);
     
     % solve least squares problem using dense matrix inversion
+    quse = domain(2:end);
+    quse = quse(IndFilter);
+    quse = quse(:);
+    diags_use = diags(:);
+
     
 	fprintf('mldivide-time\n')
     %calculating the jacobian matrix
     tic
 	DF_newton = creating_frechet_matrix_newton_lowmem(PARAMETERS, ...
-              NODES, OPERATORS, xx, yy, u_total_domain_newton);    
+              NODES, OPERATORS, xx, yy, u_total_domain_newton);  
 
+    toc;
+
+    tic
     %newton step here
-    M = DF_newton'*DF_newton + diag(diags.^2);
-    quse = domain(2:end);
-    quse = quse(IndFilter);
+    M = (DF_newton'*DF_newton)/rsc.^2 + diag(diags(:).^2);
+
     % Note that rhs_newton already has negative sign since
     % earlier solve was DF_newton \ rhs_newton
-    rhs_use = DF_newton'*rhs_newton - diags(:).^2.*quse(:);
-    diaginv = max(diags.^2, 1);
+    rhs_use = (DF_newton'*rhs_newton)/rsc.^2 - diags(:).^2.*quse(:);
+    diaginv = max(diags(:).^2, 1);
     diaginv = (1.0./diaginv);
     M = diaginv.*M;
     rhs_use = diaginv.*rhs_use;
     dq_newton = M \ rhs_use;
-
-    toc
+    
 	
 	iter_lsqr(it_newton) = 0;
     
@@ -161,6 +171,7 @@ while flag_newton
     rhs_newton = zeros(2*size(u_meas.field,1),1);
     rhs_newton(1:2:end) = res_aux_real;
     rhs_newton(2:2:end) = res_aux_imag;
+    rhs_orig = u_meas.field - u_scat_bd_newton;
 
     q = domain(2:end);
     q = q(IndFilter);
